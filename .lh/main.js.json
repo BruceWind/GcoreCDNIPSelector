@@ -1,0 +1,102 @@
+{
+    "sourceFile": "main.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 21,
+            "patches": [
+                {
+                    "date": 1662636525152,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1662636548257,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n \"use strict\"\n \n const Netmask = require('netmask').Netmask\n \n-let block = new Netmask('198.162.1.1/24')\n+let block = new Netmask('180.163.57.128/26')\n block.forEach( (ip, long, index) => {\n   console.log(\"Next IP is\", ip)\n })\n \n"
+                },
+                {
+                    "date": 1662636560693,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,13 +7,11 @@\n \n const Netmask = require('netmask').Netmask\n \n let block = new Netmask('180.163.57.128/26')\n-block.forEach( (ip, long, index) => {\n-  console.log(\"Next IP is\", ip)\n-})\n \n \n+\n function execPromise(command) {\n     return new Promise(function (resolve, reject) {\n         exec(command, (error, stdout, stderr) => {\n             if (error) {\n"
+                },
+                {
+                    "date": 1662636574693,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,8 @@\n \"use strict\"\n \n const Netmask = require('netmask').Netmask\n \n-let block = new Netmask('180.163.57.128/26')\n \n \n \n function execPromise(command) {\n@@ -29,9 +28,10 @@\n     try {\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n         const json = JSON.parse(result);\n         const arrOfIPs = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n-        console.log(\"Output 1: \\n\", arrOfIPs)\n+        \n+let block = new Netmask('180.163.57.128/26')\n     } catch (e) {\n         console.error(e.message);\n     }\n }\n"
+                },
+                {
+                    "date": 1662636582991,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,10 @@\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n         const json = JSON.parse(result);\n         const arrOfIPs = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n         \n-let block = new Netmask('180.163.57.128/26')\n+        arrOfIPs.map\n+        let block = new Netmask('180.163.57.128/26')\n     } catch (e) {\n         console.error(e.message);\n     }\n }\n"
+                },
+                {
+                    "date": 1662636592153,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,11 @@\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n         const json = JSON.parse(result);\n         const arrOfIPs = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n         \n-        arrOfIPs.map\n+        arrOfIPs.map((ipRnage) => {\n+            \n+        });\n         let block = new Netmask('180.163.57.128/26')\n     } catch (e) {\n         console.error(e.message);\n     }\n"
+                },
+                {
+                    "date": 1662636600051,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,11 +30,11 @@\n         const json = JSON.parse(result);\n         const arrOfIPs = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n         \n         arrOfIPs.map((ipRnage) => {\n-            \n+\n+            let block = new Netmask(ipRnage)\n         });\n-        let block = new Netmask('180.163.57.128/26')\n     } catch (e) {\n         console.error(e.message);\n     }\n }\n"
+                },
+                {
+                    "date": 1662636605456,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,10 +30,10 @@\n         const json = JSON.parse(result);\n         const arrOfIPs = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n         \n         arrOfIPs.map((ipRnage) => {\n-\n-            let block = new Netmask(ipRnage)\n+            let ips = new Netmask(ipRnage)\n+            \n         });\n     } catch (e) {\n         console.error(e.message);\n     }\n"
+                },
+                {
+                    "date": 1662636643301,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,13 +27,13 @@\n async function main() {\n     try {\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n         const json = JSON.parse(result);\n-        const arrOfIPs = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n-        \n+        const arrOfIPRanges = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n+\n         arrOfIPs.map((ipRnage) => {\n             let ips = new Netmask(ipRnage)\n-            \n+            console.log(ips.base, ips.broadcast)\n         });\n     } catch (e) {\n         console.error(e.message);\n     }\n"
+                },
+                {
+                    "date": 1662636690678,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,9 +29,10 @@\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n         const json = JSON.parse(result);\n         const arrOfIPRanges = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n \n-        arrOfIPs.map((ipRnage) => {\n+        arrOfIPRanges.map((ipRnage) => {\n+            //\n             let ips = new Netmask(ipRnage)\n             console.log(ips.base, ips.broadcast)\n         });\n     } catch (e) {\n"
+                },
+                {
+                    "date": 1662636699735,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -30,9 +30,8 @@\n         const json = JSON.parse(result);\n         const arrOfIPRanges = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n \n         arrOfIPRanges.map((ipRnage) => {\n-            //\n             let ips = new Netmask(ipRnage)\n             console.log(ips.base, ips.broadcast)\n         });\n     } catch (e) {\n"
+                },
+                {
+                    "date": 1662636709920,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n         });\n     });\n }\n \n-\n+//  item is https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\n async function main() {\n     try {\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n         const json = JSON.parse(result);\n"
+                },
+                {
+                    "date": 1662636728472,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n         });\n     });\n }\n \n-//  item is https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\n+// item is https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\n async function main() {\n     try {\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n         const json = JSON.parse(result);\n"
+                },
+                {
+                    "date": 1662636784559,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,10 @@\n         });\n     });\n }\n \n-// item is https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\n+// item is CIDR https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\n+// \n async function main() {\n     try {\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n         const json = JSON.parse(result);\n"
+                },
+                {
+                    "date": 1662636789792,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n         });\n     });\n }\n \n-// item is CIDR https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\n+// item is CIDR, its doc  https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\n // \n async function main() {\n     try {\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n"
+                },
+                {
+                    "date": 1662636823818,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n         });\n     });\n }\n \n-// item is CIDR, its doc  https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing\n+// item is CIDR, its doc is here https://datatracker.ietf.org/doc/rfc4632/\n // \n async function main() {\n     try {\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n"
+                },
+                {
+                    "date": 1662636852354,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,10 +7,8 @@\n \n const Netmask = require('netmask').Netmask\n \n \n-\n-\n function execPromise(command) {\n     return new Promise(function (resolve, reject) {\n         exec(command, (error, stdout, stderr) => {\n             if (error) {\n@@ -22,9 +20,9 @@\n         });\n     });\n }\n \n-// item is CIDR, its doc is here https://datatracker.ietf.org/doc/rfc4632/\n+// item is CIDR, its doc is here https://datatracker.ietf.org/doc/rfc4632/.\n // \n async function main() {\n     try {\n         var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n"
+                },
+                {
+                    "date": 1662636948337,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,9 @@\n const { exec } = require('node:child_process')\n \n // pls make sure this is identical from https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html.\n const OFFICIAL_AWS_IPs_URL = \"https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips\"\n+const PREFIX\n \n \"use strict\"\n \n const Netmask = require('netmask').Netmask\n"
+                },
+                {
+                    "date": 1662636956153,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n const { exec } = require('node:child_process')\n \n // pls make sure this is identical from https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html.\n const OFFICIAL_AWS_IPs_URL = \"https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips\"\n-const PREFIX\n+const PREFIX_IP_LOCAL\n \n \"use strict\"\n \n const Netmask = require('netmask').Netmask\n"
+                },
+                {
+                    "date": 1662636962234,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n const { exec } = require('node:child_process')\n \n // pls make sure this is identical from https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html.\n const OFFICIAL_AWS_IPs_URL = \"https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips\"\n-const PREFIX_IP_LOCAL\n+const PREFIX_IP_LOCALATION = \"\"\n \n \"use strict\"\n \n const Netmask = require('netmask').Netmask\n"
+                },
+                {
+                    "date": 1662636980219,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,9 +31,9 @@\n         const arrOfIPRanges = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n \n         arrOfIPRanges.map((ipRnage) => {\n             let ips = new Netmask(ipRnage)\n-            ips.forEach\n+            ips.forEach((ip) => {\n         });\n     } catch (e) {\n         console.error(e.message);\n     }\n"
+                },
+                {
+                    "date": 1662637008299,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,9 +32,9 @@\n \n         arrOfIPRanges.map((ipRnage) => {\n             let ips = new Netmask(ipRnage)\n             ips.forEach((ip) => {\n-                v\n+                \n             })\n         });\n     } catch (e) {\n         console.error(e.message);\n"
+                }
+            ],
+            "date": 1662636525152,
+            "name": "Commit-0",
+            "content": "const { exec } = require('node:child_process')\n\n// pls make sure this is identical from https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html.\nconst OFFICIAL_AWS_IPs_URL = \"https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips\"\n\n\"use strict\"\n\nconst Netmask = require('netmask').Netmask\n\nlet block = new Netmask('198.162.1.1/24')\nblock.forEach( (ip, long, index) => {\n  console.log(\"Next IP is\", ip)\n})\n\n\nfunction execPromise(command) {\n    return new Promise(function (resolve, reject) {\n        exec(command, (error, stdout, stderr) => {\n            if (error) {\n                reject(error);\n                return;\n            }\n\n            resolve(stdout.trim());\n        });\n    });\n}\n\n\nasync function main() {\n    try {\n        var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);\n        const json = JSON.parse(result);\n        const arrOfIPs = json[\"CLOUDFRONT_GLOBAL_IP_LIST\"];\n        console.log(\"Output 1: \\n\", arrOfIPs)\n    } catch (e) {\n        console.error(e.message);\n    }\n}\n\nsetTimeout(main, 100);"
+        }
+    ]
+}
