@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "ip-info-finder": "^2.0.3",
     "netmask": "^2.0.2"
   }
 }

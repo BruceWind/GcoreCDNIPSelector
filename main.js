@@ -3,7 +3,6 @@ const { exec } = require('node:child_process')
 // pls make sure this is identical from https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html.
 const OFFICIAL_AWS_IPs_URL = "https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips"
 const PREFIX_IP_LOCALATION = "http://ip2c.org/"
-var ipInfo = require("ip-info-finder");
 
 "use strict"
 
