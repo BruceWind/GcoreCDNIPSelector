@@ -40,6 +40,7 @@ async function main() {
         const arrOfIPRanges = json["CLOUDFRONT_GLOBAL_IP_LIST"];
 
         for (const ipRnage of arrOfIPRanges) {
+
             let netmask = new Netmask(ipRnage)
 
             let ip = netmask.first;
@@ -78,19 +79,25 @@ async function main() {
 
         const resultArr = [];
         for (let i = 0; i < excludeCNIPs.length / PING_THREADS; i++) {
-            const tempArr = excludeCNIPs.slice(i * PING_THREADS, (i + 1) * PING_THREADS);
+            const ip = excludeCNIPs[i];
 
-            for (const ip of tempArr) {
-                const lantern1 = await queryLantern(ip);
-                const lantern2 = await queryLantern(ip);
-                if (lantern1 < 150 || lantern2 < 150) {
-                    resultArr.push({ ip, lantern: (Math.min(lantern1, lantern2)) });
+            if (i % PING_THREADS == 0) {
+                const avdLantern = await queryAvgLantern(ip);
+                if (avdLantern < 200) {
+                    resultArr.push(ip);
                 }
+            }
+            else {
+                queryAvgLantern(ip).then(function (avdLantern) {
+                    if (avdLantern < 200) {
+                        resultArr.push(ip);
+                    }
+                }).catch(function (e) { });
             }
         }
 
         fs = require('fs');
-        fs.writeFile('result.txt', JSON.stringify(excludeCNIPs), function (err) {
+        fs.writeFile('result.txt', JSON.stringify(resultArr), function (err) {
             if (err) return console.log(err);
         });
 
@@ -112,6 +119,24 @@ async function queryLantern(ip) {
         console.log(`${ip}'s lantern is ${arr[1]}`);
 
         return Number(arr[1]);
+    }
+    catch (e) {
+        console.log(`${ip} is not reachable.`);
+    }
+    return 1000;
+}
+
+
+
+async function queryAvgLantern(ip) {
+    const pingCommand = `ping -c 1 -W 1 ${ip}`;
+
+    try {
+        let test = await queryLantern(ip);
+        const lantern1 = await queryLantern(ip);
+        const lantern2 = await queryLantern(ip);
+
+        return (lantern1 + lantern2) / 2;
     }
     catch (e) {
         console.log(`${ip} is not reachable.`);
