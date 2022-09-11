@@ -10,6 +10,7 @@ var ipInfo = require("ip-info-finder");
 const Netmask = require('netmask').Netmask
 
 const PING_THREADS = 300;
+// this is the pattern of the lantern from ping result.
 const lanternPattern = /time=(\d+)\sms/gm;
 
 function execPromise(command) {
@@ -77,25 +78,30 @@ async function main() {
 
         console.log(`IPs.length is ${excludeCNIPs.length}`);
 
-        const resultArr = [];
+        const unsortedArr = [];
         for (let i = 0; i < excludeCNIPs.length / PING_THREADS; i++) {
             const ip = excludeCNIPs[i];
 
             if (i % PING_THREADS == 0) {
-                const avdLantern = await queryAvgLantern(ip);
-                if (avdLantern < 200) {
-                    resultArr.push(ip);
+                const avgLantern = await queryAvgLantern(ip);
+                if (avgLantern < 200) {
+                    unsortedArr.push({ ip, lantern: avgLantern });
                 }
             }
             else {
-                queryAvgLantern(ip).then(function (avdLantern) {
-                    if (avdLantern < 200) {
-                        resultArr.push(ip);
+                queryAvgLantern(ip).then(function (avgLantern) {
+                    if (avgLantern < 200) {
+                        unsortedArr.push({ ip, lantern: avgLantern });
                     }
                 }).catch(function (e) { });
             }
         }
+        // to sort the array by the lantern.
+        const resultArr = unsortedArr.sort((a, b) => {
+            return a.lantern - b.lantern;
+        });
 
+        //to save this sorted array to 'result.txt'.
         fs = require('fs');
         fs.writeFile('result.txt', JSON.stringify(resultArr), function (err) {
             if (err) return console.log(err);
@@ -132,7 +138,7 @@ async function queryAvgLantern(ip) {
     const pingCommand = `ping -c 1 -W 1 ${ip}`;
 
     try {
-        let test = await queryLantern(ip);
+        await queryLantern(ip); // this line looks like useless, but In my opinion, this can make connection reliable. 
         const lantern1 = await queryLantern(ip);
         const lantern2 = await queryLantern(ip);
 
