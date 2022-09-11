@@ -1,11 +1,10 @@
 # CloudFrontIPSelector
-To select the best CloudFront IPs for low latency in connections.
+to choose the CloudFront IPs with the lowest possible connection latency.
 
-### Background 
-In most cases, people who use AWS CloudFront got very stable experience because AWS's DNS works very well.
+### Background
+Because AWS's DNS function is so good, users of AWS CloudFront typically report having an extremely steady experience.
 
-On the other hand, people living in China use it often get timeout,  packages lost and high latency. So some people want to find some IPs with low latency and bind on CloudFront's domain.
-For these cases, I wrote this script to select lowest latency IPs.
+On the other hand, those living in China use it often get timeout, shipments lost and high latency. As a result, some people prefer to bind to CloudFront's domain using low-latency IP addresses. I created this script to choose IPs with the lowest latency in these situations.
 
 
 ### How to use?
