@@ -1,11 +1,11 @@
 # CloudFrontIPSelector
-To select CloudFront IPs, which are best with your network.
+To select the best CloudFront IPs for low latency in connections.
 
 ### Background 
 In most cases, people who use AWS CloudFront got very stable experience because AWS's DNS works very well.
 
-On the other hand, people living in China use it often get timeout,  packages lost and high lanterns. So some people want to find some IPs with low lantern and bind on CloudFront's domain.
-For these cases, I wrote this script to select lowest lantern IPs.
+On the other hand, people living in China use it often get timeout,  packages lost and high latency. So some people want to find some IPs with low latency and bind on CloudFront's domain.
+For these cases, I wrote this script to select lowest latency IPs.
 
 
 ### How to use?

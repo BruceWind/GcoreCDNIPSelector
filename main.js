@@ -9,8 +9,8 @@ const PREFIX_IP_LOCALATION = "http://ip2c.org/"
 const Netmask = require('netmask').Netmask
 
 const PING_THREADS = 300;
-// this is the pattern of the lantern from ping result.
-const lanternPattern = /time=(\d+)\sms/gm;
+// this is the pattern of the latency from ping result.
+const latencyPattern = /time=(\d+)\sms/gm;
 
 function execPromise(command) {
     return new Promise(function (resolve, reject) {
@@ -82,22 +82,22 @@ async function main() {
             const ip = excludeCNIPs[i];
 
             if (i % PING_THREADS == 0) {
-                const avgLantern = await queryAvgLantern(ip);
-                if (avgLantern < 200) {
-                    unsortedArr.push({ ip, lantern: avgLantern });
+                const avgLatency = await queryAvgLatency(ip);
+                if (avgLatency < 200) {
+                    unsortedArr.push({ ip, latency: avgLatency });
                 }
             }
             else {
-                queryAvgLantern(ip).then(function (avgLantern) {
-                    if (avgLantern < 200) {
-                        unsortedArr.push({ ip, lantern: avgLantern });
+                queryAvgLatency(ip).then(function (avgLatency) {
+                    if (avgLatency < 200) {
+                        unsortedArr.push({ ip, latency: avgLatency });
                     }
                 }).catch(function (e) { });
             }
         }
-        // to sort the array by the lantern.
+        // to sort the array by the latency.
         const resultArr = unsortedArr.sort((a, b) => {
-            return a.lantern - b.lantern;
+            return a.latency - b.latency;
         });
 
         //to save this sorted array to 'result.txt'.
@@ -113,15 +113,15 @@ async function main() {
 
 setTimeout(main, 100);
 
-async function queryLantern(ip) {
+async function queryLatency(ip) {
     const pingCommand = `ping -c 1 -W 1 ${ip}`;
 
     try {
         const resultOfPing = await execPromise(pingCommand);
         // console.log(resultOfPing);
-        const arr = lanternPattern.exec(resultOfPing);
+        const arr = latencyPattern.exec(resultOfPing);
         if (!arr[1]) return 1000;
-        console.log(`${ip}'s lantern is ${arr[1]}`);
+        console.log(`${ip}'s latency is ${arr[1]}`);
 
         return Number(arr[1]);
     }
@@ -133,15 +133,15 @@ async function queryLantern(ip) {
 
 
 
-async function queryAvgLantern(ip) {
+async function queryAvgLatency(ip) {
     const pingCommand = `ping -c 1 -W 1 ${ip}`;
 
     try {
-        await queryLantern(ip); // this line looks like useless, but In my opinion, this can make connection reliable. 
-        const lantern1 = await queryLantern(ip);
-        const lantern2 = await queryLantern(ip);
+        await queryLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable. 
+        const latency1 = await queryLatency(ip);
+        const latency2 = await queryLatency(ip);
 
-        return (lantern1 + lantern2) / 2;
+        return (latency1 + latency2) / 2;
     }
     catch (e) {
         console.log(`${ip} is not reachable.`);
