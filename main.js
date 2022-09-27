@@ -1,6 +1,6 @@
 const { exec } = require('node:child_process')
 
-// pls make sure this is identical from https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html.
+// pls make sure this is identical url from https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html.
 const OFFICIAL_AWS_IPs_URL = "https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips"
 const PREFIX_IP_LOCALATION = "http://ip2c.org/"
 
@@ -8,7 +8,8 @@ const PREFIX_IP_LOCALATION = "http://ip2c.org/"
 
 const Netmask = require('netmask').Netmask
 
-const PING_THREADS = 300;
+const PING_THREADS = 3000;
+let countOfBeingProcess = 0;
 // this is the pattern of the latency from ping result.
 const latencyPattern = /time=(\d+)\sms/gm;
 
@@ -40,8 +41,7 @@ async function main() {
         const arrOfIPRanges = json["CLOUDFRONT_GLOBAL_IP_LIST"];
 
         for (const ipRnage of arrOfIPRanges) {
-
-            let netmask = new Netmask(ipRnage)
+            let netmask = new Netmask(ipRnage);
 
             let ip = netmask.first;
 
@@ -78,23 +78,31 @@ async function main() {
         console.log(`IPs.length is ${excludeCNIPs.length}`);
 
         const unsortedArr = [];
-        for (let i = 0; i < excludeCNIPs.length / PING_THREADS; i++) {
+        for (let i = 0; i < excludeCNIPs.length; i++) {
             const ip = excludeCNIPs[i];
 
-            if (i % PING_THREADS == 0) {
+            if (countOfBeingProcess > PING_THREADS) {
+                countOfBeingProcess++;
                 const avgLatency = await queryAvgLatency(ip);
                 if (avgLatency < 200) {
                     unsortedArr.push({ ip, latency: avgLatency });
                 }
+                countOfBeingProcess--;
             }
             else {
+                countOfBeingProcess++;
                 queryAvgLatency(ip).then(function (avgLatency) {
                     if (avgLatency < 200) {
                         unsortedArr.push({ ip, latency: avgLatency });
                     }
-                }).catch(function (e) { });
+                    countOfBeingProcess--;
+                }).catch(function (e) {
+                    countOfBeingProcess--;
+                });
             }
         }
+
+        console.log(`unsortedArr.length is ${unsortedArr.length}`);
         // to sort the array by the latency.
         const resultArr = unsortedArr.sort((a, b) => {
             return a.latency - b.latency;
@@ -140,11 +148,10 @@ async function queryAvgLatency(ip) {
         await queryLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable. 
         const latency1 = await queryLatency(ip);
         const latency2 = await queryLatency(ip);
-
         return (latency1 + latency2) / 2;
     }
     catch (e) {
-        console.log(`${ip} is not reachable.`);
+        console.log(`${ip} is not reachable.`, e.message);
     }
     return 1000;
 }
