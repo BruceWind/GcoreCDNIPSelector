@@ -5,7 +5,9 @@ to choose the [Gcore](https://gcore.com/) IPs with the lowest possible connectio
 Gcore cdn provide a smooth experience over the world.
 
 However, those who living in China use it sometime get laggy, shipments-lost and high latency.
-As a result, some people prefer to bind to Gcore's domain using low-latency IP addresses. I created this script to choose IPs with the lowest latency in these situations.
+As a result, some people prefer to bind to Gcore's domain using low-latency IP addresses. 
+
+So, I wrote a script to choose IPs with the lowest latency to cater for this situation.
 
 
 ### How to use?
@@ -23,4 +25,4 @@ node ./main.js
 
 ### In addition
 
-At present, I use https://api.gcorelabs.com/cdn/public-net-list to query IPs. It may be expired. As result of that, this script will going to be invalid. If you find this script is invalid, please put up an issue or find new url to replace.
+At present, I use https://api.gcorelabs.com/cdn/public-net-list to query IPs. In case it expired, this script will going to be invalid. If you find this script is invalid, please put up an issue or find new url to replace.
