@@ -1,10 +1,10 @@
-# CloudFrontIPSelector
-to choose the CloudFront IPs with the lowest possible connection latency.
+# GcoreCDNIPSelector
+to choose the [Gcore](https://gcore.com/) IPs with the lowest possible connection latency.
 
 ### Background
-Because AWS's DNS function is so good, users of AWS CloudFront typically report having an extremely steady experience.
+Because Gcore's DNS function is so good, users of Gcore typically report having an extremely steady experience.
 
-On the other hand, those living in China use it often get timeout, shipments lost and high latency. As a result, some people prefer to bind to CloudFront's domain using low-latency IP addresses. I created this script to choose IPs with the lowest latency in these situations.
+On the other hand, those living in China use it often get timeout, shipments lost and high latency. As a result, some people prefer to bind to Gcore's domain using low-latency IP addresses. I created this script to choose IPs with the lowest latency in these situations.
 
 
 ### How to use?
@@ -18,3 +18,8 @@ node ./main.js
 ```
 
 3. wait minites to get `result.txt` which contain best IPs will be saved in this folder.
+
+
+### In addition
+
+At present, I use https://api.gcorelabs.com/cdn/public-net-list to query IPs. It may be expired. As result of that, this script will going to be invalid. If you find this script is invalid, please put up an issue or find new url to replace.

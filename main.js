@@ -1,8 +1,10 @@
 const { exec } = require('node:child_process')
 
 // pls make sure this is identical url from https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/LocationsOfEdgeServers.html.
-const OFFICIAL_AWS_IPs_URL = "https://d7uri8nf7uskq.cloudfront.net/tools/list-cloudfront-ips"
-const PREFIX_IP_LOCALATION = "http://ip2c.org/"
+const OFFICIAL_CDN_IPs_URL = "https://api.gcorelabs.com/cdn/public-net-list"
+
+// This line had set been disable, due to Gcore without IP in China mainland.
+//const PREFIX_IP_LOCALATION = "http://ip2c.org/" // It is used to query which country belongs to.
 
 "use strict"
 
@@ -35,42 +37,19 @@ let excludeCNIPs = [];
 // 
 async function main() {
     try {
-        var result = await execPromise(`curl ${OFFICIAL_AWS_IPs_URL}`);
+        var result = await execPromise(`curl ${OFFICIAL_CDN_IPs_URL}`);
         const json = JSON.parse(result);
         // items of this are CIDR, its doc is here https://datatracker.ietf.org/doc/rfc4632/.
-        const arrOfIPRanges = json["CLOUDFRONT_GLOBAL_IP_LIST"];
+        const arrOfIPRanges = json["CLOUDFRONT_GLOBAL_IP_LIST"] || json["addresses"];
 
         for (const ipRnage of arrOfIPRanges) {
             let netmask = new Netmask(ipRnage);
 
             let ip = netmask.first;
 
-            const queryLocationCommand = `curl --max-time 6.5  --connect-timeout 6.0  ${PREFIX_IP_LOCALATION}${ip}`;
-            let resultOfIP = undefined;
-            try {
-                resultOfIP = await execPromise(queryLocationCommand);
-            }
-            catch (e) {
-                console.log(`${queryLocationCommand} is faield.`, e);
-                continue;
-            }
-
-            if (resultOfIP.includes(';')) {
-                const nation = resultOfIP.split(";")[1].trim();
-
-                console.log(`${ip} is in ${nation}. size: ${netmask.size}`);
-                if (nation == 'CN') {
-                    continue;
-                }
-                else {
-                    netmask.forEach(async (ip) => {
-                        excludeCNIPs.push(ip);
-                    })
-                }
-            }
-            else {
-                throw new Error(` unexpected result : ${resultOfIP}.`)
-            }
+            netmask.forEach(async (ip) => {
+                excludeCNIPs.push(ip);
+            })
 
         }
 
