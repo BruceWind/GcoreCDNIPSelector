@@ -2,10 +2,10 @@
 to choose the [Gcore](https://gcore.com/) IPs with the lowest possible connection latency.
 
 ### Background
-Gcore cdn provide a smooth experience over the world.
+Gcore's CDN provide a smooth experience over the world.
 
-However, those who living in China use it sometime get laggy, shipments-lost and high latency.
-As a result, some people would have lived to bind to Gcore's domain using low-latency IP addresses. 
+However, network connections from China sometime get shipments-lost and high-latency.
+As a result, some people would have liked to use low-latency IP addresses to bind Gcore's domain. 
 
 So, I wrote a script to choose IPs with the lowest latency to cater for this situation.
 
