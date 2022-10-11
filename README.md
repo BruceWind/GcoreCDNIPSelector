@@ -11,7 +11,7 @@ As a result, some people prefer to bind to Gcore's domain using low-latency IP a
 ### How to use?
 
 1. set up node environment.
-Some pople who have no experience on Node  may need to set up [nvm](https://github.com/nvm-sh/nvm).
+In case people who havn't set up node. I heavily recommand [nvm](https://github.com/nvm-sh/nvm).
 
 2. run this JS file.
 ```
