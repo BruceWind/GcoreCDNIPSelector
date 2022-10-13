@@ -17,6 +17,7 @@ In case people who havn't set up node. I highly recommand [nvm](https://github.c
 
 2. run this JS file.
 ```
+npm install
 node ./main.js
 ```
 
