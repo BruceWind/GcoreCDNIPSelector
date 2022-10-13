@@ -1,5 +1,5 @@
 # GcoreCDNIPSelector
-to choose the [Gcore](https://gcore.com/) IPs with the lowest possible connection latency.
+to choose the best IP from [Gcore](https://gcore.com/) to reach the lowest latency and stable connections.
 
 ### Background
 Gcore's CDN provide a smooth experience over the world.
@@ -13,7 +13,7 @@ So, I wrote a script to choose IPs with the lowest latency to cater for this sit
 ### How to use?
 
 1. set up node environment.
-In case people who havn't set up node. I highly recommand [nvm](https://github.com/nvm-sh/nvm) to set up.
+In case people who havn't set up node. I highly recommand [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows.) to set up.
 
 2. run this JS file.
 ```
