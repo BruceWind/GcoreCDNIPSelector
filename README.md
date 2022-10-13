@@ -1,5 +1,5 @@
 # GcoreCDNIPSelector
-to choose the best IP from [Gcore](https://gcore.com/) to reach the lowest latency and stable connections.
+to choose the best IP from [Gcore-CDN](https://gcore.com/cdn/) to reach the lowest latency and stable connections.
 
 ### Background
 Gcore's CDN provide a smooth experience over the world.
