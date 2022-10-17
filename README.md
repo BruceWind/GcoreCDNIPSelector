@@ -27,3 +27,11 @@ node ./main.js
 ### In addition
 
 At present, I use https://api.gcorelabs.com/cdn/public-net-list to query IPs. In case it expired, this script will going to be invalid. If you find this script is invalid, please put up an issue or find new url to replace.
+
+
+
+### In addition
+
+Have you tried AWS CDN Cloudfront? 
+
+I have written another IP-selector for Gcore: https://github.com/BruceWind/CloudFrontIPSelector, you can try it.
