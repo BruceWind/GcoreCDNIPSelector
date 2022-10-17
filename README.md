@@ -13,7 +13,7 @@ So, I wrote a script to choose IPs with the lowest latency to cater for this sit
 ### How to use?
 
 1. set up node environment.
-In case people who havn't set up node. I highly recommand [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows.) to set up.
+In case people who haven't set up node. I highly recommand [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows.) to set up.
 
 2. run this JS file.
 ```
@@ -34,4 +34,4 @@ At present, I use https://api.gcorelabs.com/cdn/public-net-list to query IPs. In
 
 Have you tried AWS CDN Cloudfront? 
 
-I have written another IP-selector for Gcore: https://github.com/BruceWind/CloudFrontIPSelector, you can try it.
+I have written another IP-selector for Cloudfront: https://github.com/BruceWind/CloudFrontIPSelector, you can try it.
