@@ -10,7 +10,7 @@ const OFFICIAL_CDN_IPs_URL = "https://api.gcorelabs.com/cdn/public-net-list"
 
 const Netmask = require('netmask').Netmask
 
-const PING_THREADS = 3000;
+const PING_THREADS = 100;
 let countOfBeingProcess = 0;
 // this is the pattern of the latency from ping result.
 const latencyPattern = /time=(\d+)\sms/gm;
@@ -60,7 +60,7 @@ async function main() {
         for (let i = 0; i < excludeCNIPs.length; i++) {
             const ip = excludeCNIPs[i];
 
-            if (countOfBeingProcess > PING_THREADS) {
+            if (countOfBeingProcess > PING_THREADS || i > excludeCNIPs.length - 10) {
                 countOfBeingProcess++;
                 const avgLatency = await queryAvgLatency(ip);
                 if (avgLatency < 200) {
@@ -113,7 +113,7 @@ async function queryLatency(ip) {
         return Number(arr[1]);
     }
     catch (e) {
-        console.log(`${ip} is not reachable.`);
+        // console.log(`${ip} is not reachable.`);
     }
     return 1000;
 }
