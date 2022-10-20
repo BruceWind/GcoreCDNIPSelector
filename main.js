@@ -10,10 +10,8 @@ const OFFICIAL_CDN_IPs_URL = "https://api.gcorelabs.com/cdn/public-net-list"
 
 const Netmask = require('netmask').Netmask
 
-const PING_THREADS = 100;
+const PING_THREADS = 800;
 let countOfBeingProcess = 0;
-// this is the pattern of the latency from ping result.
-const latencyPattern = /time=(\d+)\sms/gm;
 
 function execPromise(command) {
     return new Promise(function (resolve, reject) {
@@ -40,7 +38,7 @@ async function main() {
         var result = await execPromise(`curl ${OFFICIAL_CDN_IPs_URL}`);
         const json = JSON.parse(result);
         // items of this are CIDR, its doc is here https://datatracker.ietf.org/doc/rfc4632/.
-        const arrOfIPRanges = json["CLOUDFRONT_GLOBAL_IP_LIST"] || json["addresses"];
+        const arrOfIPRanges = json["addresses"];
 
         for (const ipRnage of arrOfIPRanges) {
             let netmask = new Netmask(ipRnage);
@@ -63,7 +61,7 @@ async function main() {
             if (countOfBeingProcess > PING_THREADS || i > excludeCNIPs.length - 10) {
                 countOfBeingProcess++;
                 const avgLatency = await queryAvgLatency(ip);
-                if (avgLatency < 200) {
+                if (avgLatency < 150) {
                     unsortedArr.push({ ip, latency: avgLatency });
                 }
                 countOfBeingProcess--;
@@ -71,7 +69,7 @@ async function main() {
             else {
                 countOfBeingProcess++;
                 queryAvgLatency(ip).then(function (avgLatency) {
-                    if (avgLatency < 200) {
+                    if (avgLatency < 150) {
                         unsortedArr.push({ ip, latency: avgLatency });
                     }
                     countOfBeingProcess--;
@@ -101,19 +99,17 @@ async function main() {
 setTimeout(main, 100);
 
 async function queryLatency(ip) {
-    const pingCommand = `ping -c 1 -W 1 ${ip}`;
-
+    const ping = require('ping');
     try {
-        const resultOfPing = await execPromise(pingCommand);
-        // console.log(resultOfPing);
-        const arr = latencyPattern.exec(resultOfPing);
-        if (!arr[1]) return 1000;
-        console.log(`${ip}'s latency is ${arr[1]}`);
+        const result = await ping.promise.probe(ip, {
+            timeout: 2,
+            extra: ['-i', '2'],
+        });
 
-        return Number(arr[1]);
+        return result.alive ? Math.round(result.avg) : 1000;
     }
     catch (e) {
-        // console.log(`${ip} is not reachable.`);
+        console.log(`${ip} is not reachable.`, e.message);
     }
     return 1000;
 }
@@ -121,13 +117,14 @@ async function queryLatency(ip) {
 
 
 async function queryAvgLatency(ip) {
-    const pingCommand = `ping -c 1 -W 1 ${ip}`;
-
     try {
         await queryLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable. 
         const latency1 = await queryLatency(ip);
+        if (latency1 > 200) return latency1;
         const latency2 = await queryLatency(ip);
-        return (latency1 + latency2) / 2;
+        if (latency2 > 200) return latency2;
+        const latency3 = await queryLatency(ip);
+        return Math.round((latency1 + latency2 + latency3) / 3);
     }
     catch (e) {
         console.log(`${ip} is not reachable.`, e.message);
