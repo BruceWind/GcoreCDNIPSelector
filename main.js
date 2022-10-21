@@ -91,6 +91,13 @@ async function main() {
             if (err) return console.log(err);
         });
 
+        if (resultArr.length > 0) {
+            console.log(`Congraduration!!! Fount ${resultArr.length} IPs`);
+        }
+        else {
+            console.err(`Sorry, no IPs found.`);
+        }
+
     } catch (e) {
         console.error(e.message);
     }
