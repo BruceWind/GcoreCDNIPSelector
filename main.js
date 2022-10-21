@@ -103,7 +103,6 @@ async function queryLatency(ip) {
     try {
         const result = await ping.promise.probe(ip, {
             timeout: 2,
-            extra: ['-i', '2'],
         });
 
         return result.alive ? Math.round(result.avg) : 1000;
