@@ -92,7 +92,7 @@ async function main() {
         });
 
         if (resultArr.length > 0) {
-            console.log(`Congraduration!!! Fount ${resultArr.length} IPs`);
+            console.log(`Congratulation!!! Fount ${resultArr.length} IPs`);
         }
         else {
             console.err(`Sorry, no IPs found.`);
