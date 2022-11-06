@@ -10,6 +10,7 @@ const OFFICIAL_CDN_IPs_URL = "https://api.gcorelabs.com/cdn/public-net-list"
 
 const Netmask = require('netmask').Netmask
 
+const THRESHOLD = 150;
 const PING_THREADS = 800;
 let countOfBeingProcess = 0;
 
@@ -61,7 +62,7 @@ async function main() {
             if (countOfBeingProcess > PING_THREADS || i > excludeCNIPs.length - 10) {
                 countOfBeingProcess++;
                 const avgLatency = await queryAvgLatency(ip);
-                if (avgLatency < 150) {
+                if (avgLatency < THRESHOLD) {
                     unsortedArr.push({ ip, latency: avgLatency });
                 }
                 countOfBeingProcess--;
@@ -69,7 +70,7 @@ async function main() {
             else {
                 countOfBeingProcess++;
                 queryAvgLatency(ip).then(function (avgLatency) {
-                    if (avgLatency < 150) {
+                    if (avgLatency < THRESHOLD) {
                         unsortedArr.push({ ip, latency: avgLatency });
                     }
                     countOfBeingProcess--;
@@ -91,11 +92,16 @@ async function main() {
             if (err) return console.log(err);
         });
 
-        if (resultArr.length > 0) {
-            console.log(`Congratulation!!! Fount ${resultArr.length} IPs`);
+         if (resultArr.length > 0) {
+            console.log(`Congratulation!!! Fount ${resultArr.length} available IPs.`);
+
+            console.log(`Plz, open result.txt to get them.`);
         }
         else {
-            console.err(`Sorry, no IPs found.`);
+            console.error(`Sorry, no available IPs was found.`);
+        
+            console.log('You could try increasing THREASHOLD.');
+        
         }
 
     } catch (e) {
