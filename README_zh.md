@@ -13,7 +13,8 @@ Gcore的CDN在全球范围内提供了一个无缝的体验。然而，来自中
 
 2.运行这个JS文件。
 ```
-npm安装
+cd GcoreCDNIPSelector/
+npm install
 node .
 ```
 
