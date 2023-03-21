@@ -8,9 +8,9 @@ Gcore的CDN在全球范围内提供了一个无缝的体验。然而，来自中
 
 ### 使用指导
 
-1. 设置节点环境。
+1. 设置node环境。
 
-如果人们还没有设置节点。我强烈推荐[nvm](https://github.com/nvm-sh/nvm)或[nvm-windows](https://github.com/coreybutler/nvm-windows。)来设置。
+如果你还没有设置node, 我强烈推荐[nvm](https://github.com/nvm-sh/nvm)或[nvm-windows](https://github.com/coreybutler/nvm-windows。)来设置。
 
 2. 运行这个JS文件。
 ```
