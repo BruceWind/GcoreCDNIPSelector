@@ -20,7 +20,7 @@ node .
 3. wait for a few minutes to receive result.txt, which contains the optimal IP addresses saved in this folder.
 
 
-For choosing the best one of result, you may need [站长ping](https://ping.chinaz.com/) to make sure that the connection is stable over China. Otherwise, you can use your HTTP service to test bandwidth.
+For choosing the best one of result, you may need [站长ping](https://ping.chinaz.com/) to make sure that the connection is almost stable on every China citis. Otherwise, you can use your HTTP service to test bandwidth.
 
 
 ### In addition
