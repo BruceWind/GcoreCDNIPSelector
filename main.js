@@ -200,7 +200,7 @@ function fetchWithTimeout(url,httpSettings, timeout) {
 let ips = [];
 
 
-// 
+//
 async function main() {
   try {
     const httpSettings = {
@@ -210,10 +210,10 @@ async function main() {
       }
     };
 
-    let json;    
+    let json;
     try
     {
-      var response = await fetchWithTimeout(OFFICIAL_CDN_IPs_URL, httpSettings, 3000);
+      var response = await fetchWithTimeout(OFFICIAL_CDN_IPs_URL, httpSettings, 6000);
       const body = await response.text();
       json = JSON.parse(body);
     }
@@ -221,9 +221,13 @@ async function main() {
       console.error(e);
     }
 
-  
+
     // items of this are CIDR, its doc is here https://datatracker.ietf.org/doc/rfc4632/.
     const arrOfIPRanges =  json ? json["addresses"] : localRanges;
+
+    if(!json){
+      console.warn("Use local IP ranges.");
+    }
 
     for (const ipRnage of arrOfIPRanges) {
       let netmask = new Netmask(ipRnage);
@@ -312,7 +316,7 @@ async function queryLatency(ip) {
 
 async function queryAvgLatency(ip) {
   try {
-    await queryLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable. 
+    await queryLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable.
     const latency1 = await queryLatency(ip);
     if (latency1 > THRESHOLD+50) return latency1;
     const latency2 = await queryLatency(ip);
