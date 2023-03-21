@@ -14,7 +14,7 @@ In case people haven't set up node. I highly recommend [nvm](https://github.com/
 2. run this JS file.
 ```
 npm install
-node ./main.js
+node .
 ```
 
 3. wait for a few minutes to receive result.txt, which contains the optimal IP addresses saved in this folder.
@@ -28,7 +28,7 @@ For choosing the best one of result, you may need [站长ping](https://ping.chin
 At present, I use https://api.gcorelabs.com/cdn/public-net-list to query IPs. In case it expired, this script will be invalid. If you find this script is invalid, please put up an issue or find new URL to replace it.
 
 
-Have you tried AWS CDN Cloudfront? 
+Have you tried AWS CDN Cloudfront?
 
 I have written another IP-selector for Cloudfront: https://github.com/BruceWind/CloudFrontIPSelector, you can try it.
 
