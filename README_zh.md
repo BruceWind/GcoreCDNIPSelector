@@ -33,6 +33,6 @@ node .
 
 你试过AWS CDN Cloudfront吗？
 
-我已经为Cloudfront写了另一个IP选择器：https://github.com/BruceWind/CloudFrontIPSelector，你可以试试。
+我已经为Cloudfront写了另一个IP选择器：[CloudFrontIPSelector](https://github.com/BruceWind/CloudFrontIPSelector),你可以试试。
 
 
