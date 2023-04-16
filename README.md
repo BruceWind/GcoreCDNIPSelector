@@ -1,6 +1,6 @@
 # GcoreCDNIPSelector
 
-[中文](https://github.com/BruceWind/GcoreCDNIPSelector/blob/main/README_zh.md)
+[中文](https://github.com/BruceWind/GcoreCDNIPSelector/blob/main/README_zh.md)｜[English](https://github.com/BruceWind/GcoreCDNIPSelector/blob/main/README.md)
 
 Select the optimal IP from [Gcore-CDN](https://gcore.com/cdn/) for the lowest latency and most stable connections.
 
