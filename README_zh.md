@@ -28,10 +28,10 @@ node .
 ### 补充
 
 目前，我使用https://api.gcorelabs.com/cdn/public-net-list 
-来查询IP。万一它过期了，这个脚本就无效了。如果你发现这个脚本是无效的，请提出问题或找到新的URL来代替它。
+来查询IP。万一它过期了，这个脚本就无效了。如果你发现这个脚本是无效的，请提出issue或找到新的URL来代替它。
 
 
-你试过AWS CDN Cloudfront吗？
+你试过AWS的CDN Cloudfront吗？
 
 我已经为Cloudfront写了另一个IP选择器：[CloudFrontIPSelector](https://github.com/BruceWind/CloudFrontIPSelector),你可以试试。
 
