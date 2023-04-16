@@ -1,4 +1,6 @@
 # GcoreCDNIPSelector
+[中文](https://github.com/BruceWind/GcoreCDNIPSelector/blob/main/README_zh.md)｜[English](https://github.com/BruceWind/GcoreCDNIPSelector/blob/main/README.md)
+
 从[Gcore-CDN](https://gcore.com/cdn/)中选择最佳IP，以获得最低延迟和最稳定的连接。
 
 
