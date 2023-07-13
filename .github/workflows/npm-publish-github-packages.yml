@@ -1,0 +1,49 @@
+# nothing
+
+name: Update IP Rangs 
+# daily job
+on:
+    push:
+    schedule:
+        -
+            # every hour
+            cron: 0 0 * * *
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    # This workflow contains a single job called "build"
+    build:
+        # The type of runner that the job will run on
+        runs-on: ubuntu-latest
+
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+            -
+                uses: actions/checkout@v2
+                
+            -  
+                name: Setup Git Infomation
+                run: |
+                     git config --global user.name 'robot'
+                     git config --global user.email 'robotTest@github.com'
+            -
+                name: Recording
+                run: |
+                     sudo apt-get update && sudo apt-get install -y jq &&  sudo apt-get install -y curl
+                     
+                     URL="https://api.gcorelabs.com/cdn/public-net-list"
+                     
+                     ms=$(curl -s $URL | jq -c '.addresses')
+                     
+                     ms1="{"\"localRanges\"":$ms}"
+                     
+                     echo "$ms1" | jq '.' > gcore_cdn_ip_ranges.json
+                     
+                     git add ./gcore_cdn_ip_ranges.json
+                     
+                     git commit -m "update gcore_cdn_ip_ranges.json"
+            -
+                name: Pushing
+                run: |
+                    git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"
