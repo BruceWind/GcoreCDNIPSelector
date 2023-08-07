@@ -32,7 +32,7 @@ jobs:
                 run: |
                      sudo apt-get update && sudo apt-get install -y jq &&  sudo apt-get install -y curl
                      
-                     URL="https://api.gcorelabs.com/cdn/public-net-list"
+                     URL="https://api.gcore.com/cdn/public-ip-list"
                      
                      ms=$(curl -s $URL | jq -c '.addresses')
                      

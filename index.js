@@ -13,10 +13,10 @@ function readJsonFile(filePath) {
 }
 
 
-const OFFICIAL_CDN_IPs_URL = "https://api.gcorelabs.com/cdn/public-net-list"
+const OFFICIAL_CDN_IPs_URL = "https://api.gcore.com/cdn/public-ip-list"
 
 //Read IP from gcore_cdn_ip_ranges.json located in the project's root directory and update it weekly or daily.
-const {localRanges} = readJsonFile("./gcore_cdn_ip_ranges.json")
+const { localRanges } = readJsonFile("./gcore_cdn_ip_ranges.json")
 
 
 
@@ -45,7 +45,7 @@ function execPromise(command) {
 }
 
 
-function fetchWithTimeout(url,httpSettings, timeout) {
+function fetchWithTimeout(url, httpSettings, timeout) {
   return Promise.race([
     fetch(url, httpSettings),
     new Promise((_, reject) =>
@@ -70,21 +70,20 @@ async function main() {
     };
 
     let json;
-    try
-    {
+    try {
       var response = await fetchWithTimeout(OFFICIAL_CDN_IPs_URL, httpSettings, 6000);
       const body = await response.text();
       json = JSON.parse(body);
     }
-    catch(e){
+    catch (e) {
       console.error(e);
     }
 
 
     // items of this are CIDR, its doc is here https://datatracker.ietf.org/doc/rfc4632/.
-    const arrOfIPRanges =  json ? json["addresses"] : localRanges;
+    const arrOfIPRanges = json ? json["addresses"] : localRanges;
 
-    if(!json){
+    if (!json) {
       console.warn("Use local IP ranges.");
     }
 
@@ -178,9 +177,9 @@ async function queryAvgLatency(ip) {
   try {
     await queryLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable.
     const latency1 = await queryLatency(ip);
-    if (latency1 > THRESHOLD+50) return latency1;
+    if (latency1 > THRESHOLD + 50) return latency1;
     const latency2 = await queryLatency(ip);
-    if (latency2 > THRESHOLD+50) return latency2;
+    if (latency2 > THRESHOLD + 50) return latency2;
     const latency3 = await queryLatency(ip);
     return Math.round((latency1 + latency2 + latency3) / 3);
   }
