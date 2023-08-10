@@ -27,7 +27,7 @@ const { localRanges } = readJsonFile("./gcore_cdn_ip_ranges.json")
 
 import { Netmask } from 'netmask';
 
-const THRESHOLD = 90;
+const THRESHOLD = 100;
 const PING_THREADS = 800;
 let countOfBeingProcess = 0;
 

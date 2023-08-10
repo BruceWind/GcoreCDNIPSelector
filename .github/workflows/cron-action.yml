@@ -3,7 +3,6 @@
 name: Update IP Rangs
 # daily job
 on:
-  push:
   schedule:
     - # daily job at  12PM with  UTC time
       cron: "0 12 * * *"
