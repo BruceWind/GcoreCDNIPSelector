@@ -5,8 +5,8 @@ name: Update IP Rangs
 on:
   push:
   schedule:
-    - # weekly job
-      cron: "0 0 * * 1"
+    - # daily job at  12PM with  UTC time
+      cron: "0 12 * * *"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,19 +26,10 @@ jobs:
           git config --global user.email 'robotTest@github.com'
       - name: Recording
         run: |
-          apt-get update && apt-get install -y jq &&  apt-get install -y curl
-
-          URL="https://api.gcore.com/cdn/public-ip-list"
-
-          ms=$(curl -s $URL | jq -c '.addresses')
-
-          ms1="{"\"localRanges\"":$ms}"
-
-          echo "$ms1" | jq '.' > gcore_cdn_ip_ranges.json
-
-          git add ./gcore_cdn_ip_ranges.json
-
-          git commit -m "update gcore_cdn_ip_ranges.json"
+          yarn install
+          node .
+          git add -f ./result.txt
+          git commit -m "update result.txt"
       - name: Pushing
         run: |
           git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"
