@@ -1,6 +1,6 @@
 # nothing
 
-name: Update IP Rangs
+name: Scan and Push
 # daily job
 on:
   schedule:
