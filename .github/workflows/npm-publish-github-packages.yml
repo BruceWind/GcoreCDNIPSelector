@@ -25,9 +25,8 @@ jobs:
           git config --global user.name 'bot'
           git config --global user.email 'robotTest@github.com'
       - name: Recording
+        # apt-get update && apt-get install -y jq &&  apt-get install -y curl
         run: |
-          apt-get update && apt-get install -y jq &&  apt-get install -y curl
-
           URL="https://api.gcore.com/cdn/public-ip-list"
 
           ms=$(curl -s $URL | jq -c '.addresses')
