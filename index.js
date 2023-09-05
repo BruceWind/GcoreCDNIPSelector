@@ -13,7 +13,7 @@ function readJsonFile(filePath) {
 }
 
 
-const OFFICIAL_CDN_IPs_URL = https://api.gcore.com/cdn/public-ip-list"
+const OFFICIAL_CDN_IPs_URL = "https://api.gcore.com/cdn/public-ip-list"
 
 //Read IP from gcore_cdn_ip_ranges.json located in the project's root directory and update it weekly or daily.
 const { localRanges } = readJsonFile("./gcore_cdn_ip_ranges.json")
