@@ -131,24 +131,20 @@ async function main() {
     const resultArr = unsortedArr.sort((a, b) => {
       return a.latency - b.latency;
     });
-
-    //to save this sorted array to 'result.txt'.
-    fs.writeFile('result.txt', JSON.stringify(resultArr), function (err) {
-      if (err) return console.log(err);
-    });
-
     if (resultArr.length > 0) {
+      //to save this sorted array to 'result.txt'.
+      fs.writeFile('result.txt', JSON.stringify(resultArr), function (err) {
+        if (err) return console.log(err);
+      });
       console.log(`Congratulation!!! Fount ${resultArr.length} available IPs.`);
       console.log(`Plz, open result.txt to get them.`);
     }
-    else {
-      console.error(`Sorry, no available IPs was found.`);
-
-      console.log('You could try increasing THREASHOLD.');
-
-      // exit
-      process.exit(1);
+    else {// or not need to change file.
+      console.warn(`Sorry, no available IPs was found.`);
+      console.warn('You could try increasing THREASHOLD.');
     }
+    // exit
+    process.exit(0);
 
   } catch (e) {
     console.error(e.message);
