@@ -4,7 +4,7 @@
 
 Select the optimal IP from [Gcore-CDN](https://gcore.com/cdn/) for the lowest latency and most stable connections📶.
 
-> I use Github Actions（[![Scan and Push](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml/badge.svg)](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml)）to run the repo in LAN, which generates a [result.txt](/result.txt) in case of available results. I recommand you open the file instead of running the repo.
+> I use Github Actions（[![Scan and Push](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml/badge.svg)](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml)）to run the repo in LAN, which generates a [result.txt](/result.txt) in case of available results. I recommand you open the file to look results, instead of running the repo.
 
 ### Overview
 Gcore's CDN delivers a seamless experience globally. However, network connections from China sometimes experience packet loss and high latency. To address this, some users prefer to bind Gcore's domain to low-latency IP addresses. This script helps select the IP addresses with the lowest latency for such situations.
