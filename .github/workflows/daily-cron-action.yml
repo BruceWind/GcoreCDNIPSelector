@@ -33,7 +33,7 @@ jobs:
           npm install --global yarn && yarn install
           node .
           git add -f ./result.txt
-          git commit -m "update result.txt"
+          git diff --quiet && git diff --staged --quiet || git commit -m "update result.txt"
       - name: Pushing
         run: |
           git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"
