@@ -27,7 +27,7 @@ const { localRanges } = readJsonFile("./gcore_cdn_ip_ranges.json")
 
 import { Netmask } from 'netmask';
 
-const THRESHOLD = 100;
+const THRESHOLD = 140;
 const PING_THREADS = 800;
 let countOfBeingProcess = 0;
 
@@ -132,19 +132,29 @@ async function main() {
       return a.latency - b.latency;
     });
     if (resultArr.length > 0) {
+      console.log(`Available IPs: ${JSON.stringify(resultArr)}`);
       //to save this sorted array to 'result.txt'.
       fs.writeFile('result.txt', JSON.stringify(resultArr), function (err) {
-        if (err) return console.log(err);
+        if (err) {
+          console.log(err);
+          console.warn('Writing file  went wrong.');
+        } else {
+          console.log('File saved successfully.');
+          console.log(`Congratulation!!! Fount ${resultArr.length} available IPs.`);
+          console.log(`Plz, open result.txt to get them.`);
+        }
+        // exit
+        process.exit(err ? 1 : 0);
       });
-      console.log(`Congratulation!!! Fount ${resultArr.length} available IPs.`);
-      console.log(`Plz, open result.txt to get them.`);
     }
     else {// or not need to change file.
       console.warn(`Sorry, no available IPs was found.`);
       console.warn('You could try increasing THREASHOLD.');
+      // exit
+      process.exit(0);
     }
-    // exit
-    process.exit(0);
+    //  !!! Don't do this. this make app quit before IPs are written.
+    //  process.exit(0); 
 
   } catch (e) {
     console.error(e.message);
