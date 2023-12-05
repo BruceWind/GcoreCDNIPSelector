@@ -5,8 +5,8 @@ name: Scan and Push
 on:
   workflow_dispatch:
   schedule:
-    - # daily job at  12PM with  UTC time
-      cron: "0 12 * * *"
+    - # daily job at  4 AM with  UTC time
+      cron: "0 4 * * *"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
