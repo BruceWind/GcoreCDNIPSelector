@@ -31,6 +31,14 @@ For choosing the best one of result, you may need [站长ping](https://ping.chin
 
 At present, I use https://api.gcorelabs.com/cdn/public-net-list to query IPs. In case it expired, this script will be invalid. If you find this script is invalid, please put up an issue or find new URL to replace it.
 
+###  Spacial for post-Soviet countries
+<details>
+  <summary>click to expand </summary>
+  I know some countries, like China, have a strong internet censorship system called the Great Firewall (GFW). It's even stricter than China's version. You might have had trouble downloading IP ranges. To fix this, I have a backup plan. I will use Github actions to save IP ranges in this repository every week. You can turn off the code that fetches data with a timeout. If you don't do that, it will still work, but it might take more time to finish.
+  
+</details>
+
+
 
 Have you tried AWS'CDN Cloudfront?
 
