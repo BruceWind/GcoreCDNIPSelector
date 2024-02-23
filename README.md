@@ -35,7 +35,7 @@ At present, I use https://api.gcorelabs.com/cdn/public-net-list to query IPs. In
 ###  Spacial for post-Soviet countries
 <details>
   <summary>click to expand </summary>
-  I know some countries, like China, have a strong internet censorship system called the Great Firewall (GFW). It's even stricter than China's version. You might have had trouble downloading IP ranges. To fix this, I have a backup plan. I will use Github actions to save IP ranges in this repository every week. You can turn off the code `fetchWithTimeout()`. If you don't do that, it will still work, but it might take more time to finish.
+  I know some countries, like China, have a strong internet censorship system called the Great Firewall (GFW). It's even stricter than China's version. You might have had trouble downloading IP ranges during running this script. To fix this, I have a backup plan. I will use Github actions to save IP ranges in this repository every week. You can turn off the code `fetchWithTimeout()`. If you don't do that, it will still work, but it might take more time to finish.
   
 </details>
 
