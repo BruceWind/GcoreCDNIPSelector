@@ -4,7 +4,7 @@
 
 Select the optimal IP from [Gcore-CDN](https://gcore.com/cdn/) for the lowest latency and most stable connections📶.
 
-> I use Github Actions（[![Scan and Push](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml/badge.svg)](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml)）to run the repo in LAN, which generates a [result.txt](/result.txt) in case of available results. I recommand you open the file to look results, instead of running the repo.
+> I use Github Actions（[![Scan and Push](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml/badge.svg)](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml)）to run the repo in LAN, which generates a [result.txt](/result.txt) in case of available results. If U R Chinese guys, I recommand you open the file to look results, instead of running the repo.
 
 ### Overview
 Gcore's CDN delivers a seamless experience globally. However, network connections from China sometimes experience packet loss and high latency. To address this, some users prefer to bind Gcore's domain to low-latency IP addresses. This script helps select the IP addresses with the lowest latency for such situations.
@@ -27,7 +27,8 @@ node .
 For choosing the best one of result, you may need [站长ping](https://ping.chinaz.com/) to make sure that the connection is almost stable on every China citis. Otherwise, you can use your HTTP service to test bandwidth.
 
 
-### In addition
+## In addition
+----------------------------------
 
 At present, I use https://api.gcorelabs.com/cdn/public-net-list to query IPs. In case it expired, this script will be invalid. If you find this script is invalid, please put up an issue or find new URL to replace it.
 
@@ -40,7 +41,7 @@ At present, I use https://api.gcorelabs.com/cdn/public-net-list to query IPs. In
 
 
 
-Have you tried AWS'CDN Cloudfront?
+## Have you tried AWS'CDN Cloudfront?
 
 I have written another IP-selector for Cloudfront: https://github.com/BruceWind/CloudFrontIPSelector, you can try it.
 
