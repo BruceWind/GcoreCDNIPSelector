@@ -79,7 +79,8 @@ async function main() {
       json = JSON.parse(body);
     }
     catch (e) {
-      console.error(e);
+      //console.error(e);
+      console.warn("Request went wrong but it's ok. It will use local JSON file to read IP ranges.");
     }
 
 
