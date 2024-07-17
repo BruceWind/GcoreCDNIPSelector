@@ -4,6 +4,9 @@ import fs from 'node:fs';
 import ping from 'ping';
 import globalAgent from 'global-agent';
 
+import cliProgress from 'cli-progress';
+const terminalBarUI = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+
 
 globalAgent.bootstrap();
 
@@ -31,7 +34,7 @@ import { Netmask } from 'netmask';
 const THRESHOLD = 100;
 
 
-const PING_THREADS = 800;
+const PING_THREADS = 100;
 let countOfBeingProcess = 0;
 
 function execPromise(command) {
@@ -103,13 +106,15 @@ async function main() {
     }
 
 
-    console.log(`IPs.length is ${ips.length}`);
+    console.log(`Current progress:`);
 
+    terminalBarUI.start(ips.length, 0);
     const unsortedArr = [];
     for (let i = 0; i < ips.length; i++) {
       const ip = ips[i];
 
       if (countOfBeingProcess > PING_THREADS || i > ips.length - 20) {
+        terminalBarUI.update(i);
         countOfBeingProcess++;
         const avgLatency = await queryAvgLatency(ip);
         if (avgLatency < THRESHOLD) {
@@ -130,7 +135,7 @@ async function main() {
       }
     }
 
-    console.log(`unsortedArr.length is ${unsortedArr.length}`);
+    console.log(`\nunsortedArr.length is ${unsortedArr.length}`);
     // to sort the array by the latency.
     const resultArr = unsortedArr.sort((a, b) => {
       return a.latency - b.latency;

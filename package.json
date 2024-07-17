@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "cli-progress": "^3.12.0",
     "global-agent": "^3.0.0",
     "netmask": "^2.0.2",
     "node-fetch": "^3.2.10",
