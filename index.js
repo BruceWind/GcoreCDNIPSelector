@@ -4,9 +4,11 @@ import fs from 'node:fs';
 import ping from 'ping';
 import globalAgent from 'global-agent';
 
+
 import cliProgress from 'cli-progress';
 const terminalBarUI = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
 
+import net from 'node:net';
 
 globalAgent.bootstrap();
 
@@ -31,7 +33,7 @@ const { localRanges } = readJsonFile("./gcore_cdn_ip_ranges.json")
 import { Netmask } from 'netmask';
 
 // In case script can not find any available IPs, You should try to  increase {THRESHOLD} to 140.
-const THRESHOLD = 100;
+const THRESHOLD = 500;
 
 
 const PING_THREADS = 100;
@@ -127,6 +129,7 @@ async function main() {
         queryAvgLatency(ip).then(function (avgLatency) {
           if (avgLatency < THRESHOLD) {
             unsortedArr.push({ ip, latency: avgLatency });
+            console.log(`Added ${ip} with latency ${avgLatency}`);
           }
           countOfBeingProcess--;
         }).catch(function (e) {
@@ -186,16 +189,50 @@ async function queryLatency(ip) {
   return 1000;
 }
 
+const TIMEOUT = 8600;
+
+async function queryTCPLatency(ip) {
+  const port = 443;
+  const start = process.hrtime.bigint();
+
+  try {
+    await new Promise((resolve, reject) => {
+      const socket = new net.Socket();
+      const timeout = setTimeout(() => {
+        socket.destroy();
+        reject(new Error('Connection timed out'));
+      }, TIMEOUT);
+
+      socket.on('connect', () => {
+        clearTimeout(timeout);
+        const end = process.hrtime.bigint();
+        const elapsed = Number(end - start) / 1000000; // to ms
+        socket.end();
+        resolve(elapsed);
+      });
+
+      socket.on('error', (err) => {
+        clearTimeout(timeout);
+        reject(err);
+      });
+
+      socket.connect(port, ip);
+    });
+  } catch (err) {
+    console.error(`Failed to connect to ${ip}:${port}: ${err.message}`);
+    return 1000;
+  }
+}
 
 
 async function queryAvgLatency(ip) {
   try {
-    await queryLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable.
-    const latency1 = await queryLatency(ip);
+    await queryTCPLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable.
+    const latency1 = await queryTCPLatency(ip);
     if (latency1 > THRESHOLD + 50) return latency1;
-    const latency2 = await queryLatency(ip);
+    const latency2 = await queryTCPLatency(ip);
     if (latency2 > THRESHOLD + 50) return latency2;
-    const latency3 = await queryLatency(ip);
+    const latency3 = await queryTCPLatency(ip);
     return Math.round((latency1 + latency2 + latency3) / 3);
   }
   catch (e) {
