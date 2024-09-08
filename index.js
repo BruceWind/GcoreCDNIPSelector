@@ -113,7 +113,7 @@ async function main() {
     console.log(`Current progress:`);
 
     terminalBarUI.start(ips.length, 0);
-    const unsortedArr = [];
+    let unsortedArr = [];
     for (let i = 0; i < ips.length; i++) {
       const ip = ips[i];
 
@@ -125,13 +125,19 @@ async function main() {
           unsortedArr.push({ ip, latency: avgLatency });
         }
         countOfBeingProcess--;
+        if (unsortedArr.length > 150) {
+          unsortedArr = unsortedArr.sort((a, b) => {
+            return a.latency - b.latency;
+          });
+          unsortedArr.slice(100, 150);
+          console.warn('removed 50 IPs.');
+        }
       }
       else {
         countOfBeingProcess++;
         queryAvgLatency(ip).then(function (avgLatency) {
           if (avgLatency < THRESHOLD) {
             unsortedArr.push({ ip, latency: avgLatency });
-            console.log(`Added ${ip} with latency ${avgLatency}`);
           }
           countOfBeingProcess--;
         }).catch(function (e) {
