@@ -99,10 +99,12 @@ async function main() {
     for (const ipRnage of arrOfIPRanges) {
       let netmask = new Netmask(ipRnage);
 
-      let ip = netmask.first;
-
       netmask.forEach(async (ip) => {
-        ips.push(ip);
+        const ipstr = ip + '';
+        if (parseInt(ipstr.split('.')[3]) < 100) {
+          ips.push(ip);
+          // console.log('jump ' + ipstr);
+        }
       })
 
     }
@@ -184,7 +186,7 @@ async function queryLatency(ip) {
     return result.alive ? Math.round(result.avg) : 1000;
   }
   catch (e) {
-    console.log(`${ip} is not reachable.`, e.message);
+    // console.log(`${ip} is not reachable.`, e.message);
   }
   return 1000;
 }
@@ -221,7 +223,7 @@ async function queryTCPLatency(ip) {
 
     return elapsed;
   } catch (err) {
-    console.log(`TCP connection failed for ${ip}: ${err.message}`);
+    // console.log(`TCP connection failed for ${ip}: ${err.message}`);
     return 1000;
   }
 }
@@ -231,16 +233,16 @@ async function queryAvgLatency(ip) {
   try {
     await queryTCPLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable.
     const pingLatency = await queryLatency(ip);
-    if (pingLatency > THRESHOLD + 50) return latency1;
+    if (pingLatency > THRESHOLD + 50) return pingLatency;
     const latency1 = await queryTCPLatency(ip);
     if (latency1 > THRESHOLD + 50) return latency1;
     const latency2 = await queryTCPLatency(ip);
     if (latency2 > THRESHOLD + 50) return latency2;
-    if(latency1=== undefined || latency2 === undefined) throw new Error('latencies are undefined');
+    if (latency1 === undefined || latency2 === undefined) throw new Error('latencies are undefined');
     const latency3 = await queryTCPLatency(ip);
 
     const result = Math.round((latency1 + latency2) / 2);
-    
+
     return result;
   }
   catch (e) {
