@@ -33,10 +33,10 @@ const { localRanges } = readJsonFile("./gcore_cdn_ip_ranges.json")
 import { Netmask } from 'netmask';
 
 // In case script can not find any available IPs, You should try to  increase {THRESHOLD} to 140.
-const THRESHOLD = 500;
+const THRESHOLD = 200;
 
 
-const PING_THREADS = 100;
+const PING_THREADS = 50;
 let countOfBeingProcess = 0;
 
 function execPromise(command) {
@@ -196,7 +196,7 @@ async function queryTCPLatency(ip) {
   const start = process.hrtime.bigint();
 
   try {
-    await new Promise((resolve, reject) => {
+    const elapsed = await new Promise((resolve, reject) => {
       const socket = new net.Socket();
       const timeout = setTimeout(() => {
         socket.destroy();
@@ -206,7 +206,7 @@ async function queryTCPLatency(ip) {
       socket.on('connect', () => {
         clearTimeout(timeout);
         const end = process.hrtime.bigint();
-        const elapsed = Number(end - start) / 1000000; // to ms
+        const elapsed = Math.floor(Number(end - start) / 1000000); // to ms
         socket.end();
         resolve(elapsed);
       });
@@ -218,8 +218,10 @@ async function queryTCPLatency(ip) {
 
       socket.connect(port, ip);
     });
+
+    return elapsed;
   } catch (err) {
-    console.error(`Failed to connect to ${ip}:${port}: ${err.message}`);
+    console.log(`TCP connection failed for ${ip}: ${err.message}`);
     return 1000;
   }
 }
@@ -228,12 +230,18 @@ async function queryTCPLatency(ip) {
 async function queryAvgLatency(ip) {
   try {
     await queryTCPLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable.
+    const pingLatency = await queryLatency(ip);
+    if (pingLatency > THRESHOLD + 50) return latency1;
     const latency1 = await queryTCPLatency(ip);
     if (latency1 > THRESHOLD + 50) return latency1;
     const latency2 = await queryTCPLatency(ip);
     if (latency2 > THRESHOLD + 50) return latency2;
+    if(latency1=== undefined || latency2 === undefined) throw new Error('latencies are undefined');
     const latency3 = await queryTCPLatency(ip);
-    return Math.round((latency1 + latency2 + latency3) / 3);
+
+    const result = Math.round((latency1 + latency2) / 2);
+    
+    return result;
   }
   catch (e) {
     console.log(`${ip} is not reachable.`, e.message);
