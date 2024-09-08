@@ -4,7 +4,6 @@ import fs from 'node:fs';
 import ping from 'ping';
 import globalAgent from 'global-agent';
 
-
 import cliProgress from 'cli-progress';
 const terminalBarUI = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
 
@@ -12,18 +11,16 @@ import net from 'node:net';
 
 globalAgent.bootstrap();
 
+// Function to read and parse a JSON file
 function readJsonFile(filePath) {
   const jsonData = fs.readFileSync(filePath, 'utf-8');
   return JSON.parse(jsonData);
 }
 
-
 const OFFICIAL_CDN_IPs_URL = "https://api.gcore.com/cdn/public-ip-list"
 
 //Read IP from gcore_cdn_ip_ranges.json located in the project's root directory and update it weekly or daily.
 const { localRanges } = readJsonFile("./gcore_cdn_ip_ranges.json")
-
-
 
 // This line had set been disable, due to Gcore without IP in China mainland.
 //const PREFIX_IP_LOCALATION = "http://ip2c.org/" // It is used to query which country belongs to.
@@ -35,10 +32,10 @@ import { Netmask } from 'netmask';
 // In case script can not find any available IPs, You should try to  increase {THRESHOLD} to 140.
 const THRESHOLD = 200;
 
-
 const PING_THREADS = 50;
 let countOfBeingProcess = 0;
 
+// Function to execute a command as a Promise
 function execPromise(command) {
   return new Promise(function (resolve, reject) {
     exec(command, (error, stdout, stderr) => {
@@ -46,13 +43,12 @@ function execPromise(command) {
         reject(error);
         return;
       }
-
       resolve(stdout.trim());
     });
   });
 }
 
-
+// Function to fetch data with a timeout
 function fetchWithTimeout(url, httpSettings, timeout) {
   return Promise.race([
     fetch(url, httpSettings),
@@ -62,12 +58,9 @@ function fetchWithTimeout(url, httpSettings, timeout) {
   ]);
 }
 
-
-
 let ips = [];
 
-
-//
+// Main function to orchestrate the IP scanning process
 async function main() {
   try {
     const httpSettings = {
@@ -88,7 +81,6 @@ async function main() {
       console.warn("Request went wrong but it's ok. It will use local JSON file to read IP ranges.");
     }
 
-
     // items of this are CIDR, its doc is here https://datatracker.ietf.org/doc/rfc4632/.
     const arrOfIPRanges = json ? json["addresses"] : localRanges;
 
@@ -96,6 +88,7 @@ async function main() {
       console.warn("Use local IP ranges.");
     }
 
+    // Iterate through IP ranges and collect IPs
     for (const ipRnage of arrOfIPRanges) {
       let netmask = new Netmask(ipRnage);
 
@@ -117,6 +110,7 @@ async function main() {
     for (let i = 0; i < ips.length; i++) {
       const ip = ips[i];
 
+      // Check if we're at the processing limit or near the end of the IP list
       if (countOfBeingProcess > PING_THREADS || i > ips.length - 20) {
         terminalBarUI.update(i);
         countOfBeingProcess++;
@@ -125,6 +119,7 @@ async function main() {
           unsortedArr.push({ ip, latency: avgLatency });
         }
         countOfBeingProcess--;
+        // Check if we need to trim the unsorted array
         if (unsortedArr.length > 150) {
           unsortedArr = unsortedArr.sort((a, b) => {
             return a.latency - b.latency;
@@ -181,8 +176,10 @@ async function main() {
   }
 }
 
+// Delay the execution of the main function
 setTimeout(main, 100);
 
+// Function to query latency using ping
 async function queryLatency(ip) {
   try {
     const result = await ping.promise.probe(ip, {
@@ -199,6 +196,7 @@ async function queryLatency(ip) {
 
 const TIMEOUT = 8600;
 
+// Function to query TCP latency
 async function queryTCPLatency(ip) {
   const port = 443;
   const start = process.hrtime.bigint();
@@ -234,24 +232,38 @@ async function queryTCPLatency(ip) {
   }
 }
 
-
+// Function to query average latency using multiple methods
 async function queryAvgLatency(ip) {
   try {
-    await queryTCPLatency(ip); // this line looks like useless, but In my opinion, this can make connection reliable.
+    // Initial TCP latency query to establish connection
+    await queryTCPLatency(ip);
+
+    // Perform ping latency check
     const pingLatency = await queryLatency(ip);
+    // Check if ping latency exceeds threshold
     if (pingLatency > THRESHOLD + 50) return pingLatency;
+
+    // Perform multiple TCP latency checks
     const latency1 = await queryTCPLatency(ip);
+    // Check if first TCP latency exceeds threshold
     if (latency1 > THRESHOLD + 50) return latency1;
+
     const latency2 = await queryTCPLatency(ip);
+    // Check if second TCP latency exceeds threshold
     if (latency2 > THRESHOLD + 50) return latency2;
+
+    // Check for undefined latencies
     if (latency1 === undefined || latency2 === undefined) throw new Error('latencies are undefined');
+
+    // Perform an additional TCP latency check (unused in calculation)
     const latency3 = await queryTCPLatency(ip);
 
-    const result = Math.round((latency1 + latency2) / 2);
-
+    // Calculate and return the average of the two valid TCP latencies
+    const result = Math.round((latency1 + latency2 + latency3) / 3);
     return result;
   }
   catch (e) {
+    // Error handling for unreachable IP
     console.log(`${ip} is not reachable.`, e.message);
   }
   return 1000;
