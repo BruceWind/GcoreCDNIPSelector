@@ -1,28 +1,35 @@
-#!/bin/bash
+#!/bin/sh
 
 # 检查 jq 是否已安装
-if ! command -v jq &> /dev/null; then
+if ! command -v jq > /dev/null 2>&1; then
     echo "jq is not installed. Installing jq..."
 
-    # 使用 apt-get 包管理器安装 jq
-    if [[ -n $(command -v apt-get) ]]; then
-        sudo apt-get update
-        sudo apt-get install -y jq
+    # Try to detect package manager and install jq
+    if command -v apt-get > /dev/null 2>&1; then
+        sudo apt-get update && sudo apt-get install -y jq
+    elif command -v yum > /dev/null 2>&1; then
+        sudo yum install -y jq
+    elif command -v brew > /dev/null 2>&1; then
+        brew install jq
     else
         echo "Package manager not found or not supported. Please install jq manually."
+        exit 1
     fi
 else
     echo "jq is already installed."
 fi
 
 # 检查 curl 是否已安装
-if ! command -v curl &> /dev/null; then
+if ! command -v curl > /dev/null 2>&1; then
     echo "curl is not installed. Installing curl..."
 
-    # 使用 apt-get 包管理器安装 curl
-    if [[ -n $(command -v apt-get) ]]; then
-        sudo apt-get update
-        sudo apt-get install -y curl
+    # Try to detect package manager and install curl
+    if command -v apt-get > /dev/null 2>&1; then
+        sudo apt-get update && sudo apt-get install -y curl
+    elif command -v yum > /dev/null 2>&1; then
+        sudo yum install -y curl
+    elif command -v brew > /dev/null 2>&1; then
+        brew install curl
     else
         echo "Package manager not found or not supported. Please install curl manually."
         exit 1
