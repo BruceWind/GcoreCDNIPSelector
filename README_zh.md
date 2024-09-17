@@ -7,7 +7,7 @@
 ### 概述
 Gcore的CDN在全球范围内提供了一个无缝的体验。然而，来自中国的网络连接有时会出现数据包丢失和高延迟。为了解决这个问题，一些用户喜欢将Gcore的域名绑定到低延迟的IP地址。这个脚本有助于在这种情况下选择具有最低延迟的IP地址。
 
-> 我使用 Github Actions（[![Scan and Push](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml/badge.svg)](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml)）跑代码在LAN里, 这会自动生成一个 [result.txt](/result.txt). 你你可以直接查看该文件而不是跑代码。
+> 我使用 Github Actions（[![Scan and Push](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml/badge.svg)](https://github.com/BruceWind/GcoreCDNIPSelector/actions/workflows/daily-cron-action.yml)）跑代码在LAN里, 这会自动生成一个 [result.txt](/result.txt). 你你可以直接查看该文件而不是跑代码。 If you found latancies are 0 in result.txt, you should not trust them.
 
 ### 使用指导
 
