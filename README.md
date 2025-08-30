@@ -10,7 +10,7 @@ Select the optimal IP from [Gcore-CDN](https://gcore.com/cdn/) for the lowest la
 Gcore's CDN delivers a seamless experience globally. However, network connections from China sometimes experience packet loss and high latency. To address this, some users prefer to bind Gcore's domain to low-latency IP addresses. This script helps select the IP addresses with the lowest latency for such situations.
 
 
-### Usage Instructions
+### Instructions
 
 1. set up node environment.
 In case people haven't set up node. I highly recommend [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows.) to set up.
